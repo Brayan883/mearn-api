@@ -1,11 +1,28 @@
 import "./App.css";
 import PageLogin from "./pages/PageLogin";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PageHome from "./pages/PageHome";
+
 function App() {
   return (
     <>
-      <Toaster richColors  />
-      <PageLogin />
+      <BrowserRouter>
+        <Toaster richColors />
+        <Routes>
+          <Route path="/" element={<PageHome />} />
+          <Route path="/login" element={<PageLogin />} />
+          <Route
+            path="*"
+            element={
+              <>
+                {" "}
+                <h1> 404 Not Found </h1>{" "}
+              </>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

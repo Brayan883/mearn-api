@@ -6,7 +6,9 @@ export const useStore = create(
   devtools((set) => ({
     Token: null,
     addToken: ({ token }) => {
-      set({ token });
+      set({
+        Token: token,
+      });
     },
     logout: () => {
       set({
@@ -14,12 +16,13 @@ export const useStore = create(
       });
     },
     refreshToken: async () => {
-      try {
-        const data = await RefleshToken();
-        set({ Token: data.token });
-      } catch (error) {
-        console.log(error.message);
-      }
+      const data = await RefleshToken();
+      console.log( "data" ,  data)
+      set((prev) => {
+        console.log(JSON.stringify(prev, null, 2));
+        console.log(data.token);
+        return { ...prev, Token: data.token };
+      });
     },
   }))
 );

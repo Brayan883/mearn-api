@@ -2,7 +2,7 @@ import { instance } from "../utlis/axiosConf";
 
 export const RefleshToken = async () => {
   const reponde = await instance.get("api/v1/auth/refresh");
-  return reponde.data;
+  return reponde?.data;
 };
 
 export const Login = async ({ email, password }) => {
