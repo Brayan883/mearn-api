@@ -10,8 +10,8 @@ function App() {
       <BrowserRouter>
         <Toaster richColors />
         <Routes>
-          <Route path="/" element={<PageHome />} />
-          <Route path="/login" element={<PageLogin />} />
+          <Route path="/" element={<PageLogin />} />
+          <Route path="/home" element={<PageHome />} />          
           <Route
             path="*"
             element={

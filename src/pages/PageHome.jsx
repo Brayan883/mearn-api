@@ -1,30 +1,24 @@
-import { useQuery } from "react-query";
-import { toast } from "sonner";
-import UseToken from "../hooks/UseToken";
+import ListPosts from "../componets/ListPosts";
+import { Col } from "@tremor/react";
+import { Grid } from "@tremor/react";
+import { FormPost } from "../componets/FormPost";
 
 const PageHome = () => {
-  const list_post = async () => {
-    const instance = UseToken();
-    const reponde = await instance.get("api/v1/posts");
-    return reponde.data;
-  };
 
-  const { data, isLoading, isError, error } = useQuery("list_post", list_post, {
-    refetchOnWindowFocus: false,
-  });
+  
 
   return (
     <>
-      <div className="">
-        <ul>
-          {!isLoading &&
-            !isError &&
-            data.length > 0 &&
-            data?.map((post) => <li key={post.id}>{post.title}</li>)}
-          {isLoading && <li>Cargando...</li>}
-          {!isLoading && !isError && data?.length === 0 && <> No hay posts </>}
-          {!isLoading && isError && <>{error.message}</>}
-        </ul>
+      <div className="container mx-auto h-screen p-4">
+        <Grid numItems={1}  numItemsLg={2} className="gap-4"  >
+          <Col numColSpan={1}  >
+            <FormPost />
+          </Col>
+          <Col numColSpan={1}>
+            {" "}
+            <ListPosts />{" "}
+          </Col>
+        </Grid>
       </div>
     </>
   );

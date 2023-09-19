@@ -1,6 +1,6 @@
 import { instance } from "../utlis/axiosConf";
 
-export const RefleshToken = async () => {
+export const Reflesh = async () => {
   const reponde = await instance.get("api/v1/auth/refresh");
   return reponde?.data;
 };

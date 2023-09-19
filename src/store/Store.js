@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { RefleshToken } from "../services/auth";
+import { instance } from "../utlis/axiosConf";
+import { handleInterceptors } from "../utlis/confInterceptors";
 
 export const useStore = create(
-  devtools((set) => ({
+  devtools((set, get) => ({
     Token: null,
     addToken: ({ token }) => {
       set({
@@ -15,14 +16,11 @@ export const useStore = create(
         Token: null,
       });
     },
-    refreshToken: async () => {
-      const data = await RefleshToken();
-      console.log( "data" ,  data)
-      set((prev) => {
-        console.log(JSON.stringify(prev, null, 2));
-        console.log(data.token);
-        return { ...prev, Token: data.token };
-      });
+    refreshToken: () => {
+      let isRefreshing = false;
+      handleInterceptors.InterceptorsUse({get})
+      handleInterceptors.InterceptorsReflesh({isRefreshing,set});
+      return instance;
     },
   }))
 );

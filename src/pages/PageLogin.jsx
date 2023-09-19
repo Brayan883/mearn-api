@@ -4,9 +4,8 @@ import { useMutation } from "react-query";
 import { Login } from "../services/auth";
 import { useStore } from "../store/Store";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 const PageLogin = () => {
-
   const navigate = useNavigate();
 
   const loginMutation = useMutation(({ email, password }) =>
@@ -21,17 +20,17 @@ const PageLogin = () => {
       const { email, password } = Object.fromEntries(new FormData(e.target));
       const data = await loginMutation.mutateAsync({ email, password });
       if (data) addToken({ token: data.token });
-      navigate("/");
       e.target.reset();
+      navigate("/home");      
     } catch (error) {
-      if (Array.isArray(error.response.data?.errors)) {
+      if (Array.isArray(error?.response?.data?.errors)) {
         const { errors } = error.response.data;
         errors.forEach((errorMessage) => {
           toast.error(errorMessage.message);
         });
         return;
       }
-      toast.error(error.response.data?.message);
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
