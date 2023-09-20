@@ -9,11 +9,11 @@ export const FormPost = () => {
   const queryClient = useQueryClient();
   const refreshToken = useStore((state) => state.refreshToken);
 
-  const AddPosts = useMutation({
-    mutationFn: async ({ title, content }) => {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+  const AddPosts = useMutation({    
+    mutationFn: async ({ title, content, published }) => {
+      await new Promise((resolve) => setTimeout(resolve, 9000));
       return refreshToken()
-        .post("api/v1/ddjjd", { title, content })
+        .post("api/v1/posts", { title, content, published })
         .then((response) => response?.data);
     },
     onMutate: async (data) => {
@@ -24,11 +24,10 @@ export const FormPost = () => {
       const prevData = queryClient.getQueryData(["list_post"]);
 
       queryClient.setQueryData(["list_post"], (oldData) => {
-        console.log(oldData.posts, data);
-        const newCommentToAdd = structuredClone(data);
+        const newCommentToAdd = structuredClone(data);        
         newCommentToAdd.preview = true;
-        if (oldData == null) return [newCommentToAdd];
-        return [...oldData.posts, newCommentToAdd];
+        if (oldData == null) return [newCommentToAdd];        
+        return [...oldData, {  id:window.crypto.randomUUID(), ...newCommentToAdd, }];
       });
 
       return {
@@ -60,7 +59,7 @@ export const FormPost = () => {
       queryClient.invalidateQueries({
         queryKey: ["list_post"],
       });
-    },
+    },   
   });
 
   const handleSubmit = (e) => {
@@ -68,7 +67,7 @@ export const FormPost = () => {
     const { title, content, published } = Object.fromEntries(
       new FormData(e.target)
     );
-    AddPosts.mutate({ title, content });
+    AddPosts.mutate({ title, content , published });
     e.target.reset();
   };
 

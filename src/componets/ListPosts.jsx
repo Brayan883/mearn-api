@@ -66,16 +66,19 @@ const ListPosts = () => {
     () => {
       return refreshToken()
         .get("api/v1/posts")
-        .then((response) => response?.data);
+        .then((response) => response?.data?.posts);
     },
     {
       refetchOnWindowFocus: false,
     }
   );
-  return (
+
+  console.log(postList?.data)
+
+  return (    
     <>
-      {!postList.isLoading && postList.data?.posts?.length > 0 && (
-        <ListTable data={postList?.data?.posts} />
+      {!postList.isLoading && postList?.data.length > 0 && (
+        <ListTable data={postList?.data} />
       )}
       {postList.isLoading && (
         <>
@@ -85,7 +88,7 @@ const ListPosts = () => {
           </div>
         </>
       )}
-      {!postList.isLoading && postList?.data?.posts?.length === 0 && (
+      {!postList.isLoading && postList?.data?.length === 0 && (
         <ListNotPosts />
       )}
       {!postList.isLoading && postList.isError && (
