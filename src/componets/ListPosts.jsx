@@ -1,28 +1,20 @@
 /* eslint-disable react/prop-types */
-import {
-  Table,
-  TableHead,
-  TableHeaderCell,
-  TableBody,
-  TableRow,
-  TableCell,
-  Card,
-  Title,
-  Text,
-  Metric,
-} from "@tremor/react";
+
 import { toast } from "sonner";
 import { useStore } from "../store/Store";
 import { useQuery } from "react-query";
-import { Button } from "@tremor/react";
-import { Badge } from "@tremor/react";
+import { Button, Card, Loading, Table } from "react-daisyui";
 
 const ListNotPosts = () => {
   return (
     <>
-      <Text color="emerald" className="text-center text-3xl">
-        <Metric color="emerald"> No hay post </Metric>
-      </Text>
+      <div className="p-4">
+        <Card className="w-full  shadow-xl hover:-translate-y-1 transition-all ease-out"  >
+          <Card.Body>
+            <Card.Title className="mx-auto" >List Not Posts</Card.Title>
+          </Card.Body>
+        </Card>
+      </div>
     </>
   );
 };
@@ -30,51 +22,39 @@ const ListNotPosts = () => {
 const ListTable = ({ data }) => {
   return (
     <>
-      <Card>
-        <Title >Lista de posts</Title>
-        <Table className="mt-5">
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>Id</TableHeaderCell>
-              <TableHeaderCell>Titulo</TableHeaderCell>
-              <TableHeaderCell>Descripcion</TableHeaderCell>
-              <TableHeaderCell>Acciones</TableHeaderCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>
-                  <Text color="emerald"  >{item.title}</Text>
-                </TableCell>
-                <TableCell>
-                  <Text>{item.content}</Text>
-                </TableCell>
-                <TableCell className="">
-                  <Card className="relative flex gap-2 justify-center">
-                    <Badge
-                      className=" absolute z-40 -top-3 -right-3  "
-                      color={item.published ? "emerald" : "rose"}
-                    >
-                      {" "}
-                      {item.published ? "Activo" : "Inactivo"}{" "}
-                    </Badge>
-                    <Button size="sm" color="blue">
-                      {" "}
-                      Editar{" "}
-                    </Button>
-                    <Button size="sm" color="red">
-                      {" "}
-                      Eliminar{" "}
-                    </Button>
-                  </Card>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
+      <div className="p-4">
+        <Card  className="w-full  shadow-xl hover:-translate-y-1 transition-all ease-out" >
+          <Card.Title className="p-4" >  Listado de post </Card.Title>
+          <Card.Body>
+            <div className="overflow-x-auto">
+              <Table>
+                <Table.Head>
+                  <span />
+                  <span>Id</span>
+                  <span>Titulo</span>
+                  <span>Descripcion</span>
+                  <span>Opciones</span>
+                </Table.Head>
+
+                <Table.Body>
+                  {data?.map((item) => (
+                    <Table.Row key={item.id}>
+                      <span></span>
+                      <span>{item.id}</span>
+                      <span>{item.title}</span>
+                      <span>{item.content}</span>
+                      <span className="flex gap-2">
+                        <Button size="sm" variant="outline" color="info">Editar</Button>
+                        <Button size="sm" variant="outline" color="error">Eliminar</Button>
+                      </span>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
     </>
   );
 };
@@ -100,7 +80,9 @@ const ListPosts = () => {
       {postList.isLoading && (
         <>
           {" "}
-          <Text className="text-center">Cargando...</Text>{" "}
+          <div className="flex justify-center p-5 ">
+            <Loading size="lg" variant="bars" />
+          </div>
         </>
       )}
       {!postList.isLoading && postList?.data?.posts?.length === 0 && (
