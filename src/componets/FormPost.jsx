@@ -1,73 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useMutation, useQueryClient } from "react-query";
-import { useStore } from "../store/Store";
-import { toast } from "sonner";
 import { Button, Card, Input } from "react-daisyui";
-import { AxiosError } from "axios";
+import { UseQuery } from "../hooks/UseQuerys";
 
 export const FormPost = () => {
-  const queryClient = useQueryClient();
-  const refreshToken = useStore((state) => state.refreshToken);
-
-  const AddPosts = useMutation({    
-    mutationFn: async ({ title, content, published }) => {
-      await new Promise((resolve) => setTimeout(resolve, 9000));
-      return refreshToken()
-        .post("api/v1/posts", { title, content, published })
-        .then((response) => response?.data);
-    },
-    onMutate: async (data) => {
-      await queryClient.cancelQueries({
-        queryKey: ["list_post"],
-      });
-
-      const prevData = queryClient.getQueryData(["list_post"]);
-
-      queryClient.setQueryData(["list_post"], (oldData) => {
-        const newCommentToAdd = structuredClone(data);        
-        newCommentToAdd.preview = true;
-        if (oldData == null) return [newCommentToAdd];        
-        return [...oldData, {  id:window.crypto.randomUUID(), ...newCommentToAdd, }];
-      });
-
-      return {
-        prevData,
-      };
-    },
-    onError: (error, variables, context) => {
-      if (context?.prevData != null) {
-        queryClient.setQueryData(["list_post"], context.prevData);
-      }
-      if (error instanceof AxiosError) {
-        if (Array.isArray(error.response?.data.errors)) {
-          const { errors } = error.response.data;
-          errors.forEach((errorMessage) => {
-            toast.error(errorMessage.message);
-          });
-          return;
-        } else {
-          toast.error(error.response?.data.message);
-        }
-      } else {
-        toast.error(error.message);
-      }
-    },
-    onSuccess: () => {
-      toast.success("Post agregado correctamente");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["list_post"],
-      });
-    },   
-  });
-
+  const { AddPosts } = UseQuery();
   const handleSubmit = (e) => {
     e.preventDefault();
     const { title, content, published } = Object.fromEntries(
       new FormData(e.target)
     );
-    AddPosts.mutate({ title, content , published });
+    AddPosts.mutate({ title, content, published });
     e.target.reset();
   };
 

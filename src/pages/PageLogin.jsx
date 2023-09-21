@@ -4,6 +4,7 @@ import { useStore } from "../store/Store";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Input, Theme } from "react-daisyui";
+import { AxiosError } from "axios";
 
 const PageLogin = () => {
   const navigate = useNavigate();
@@ -23,14 +24,19 @@ const PageLogin = () => {
       e.target.reset();
       navigate("/home");
     } catch (error) {
-      if (Array.isArray(error?.response?.data?.errors)) {
-        const { errors } = error.response.data;
-        errors.forEach((errorMessage) => {
-          toast.error(errorMessage.message);
-        });
-        return;
+      if (error instanceof AxiosError) {
+        if (Array.isArray(error.response?.data.errors)) {
+          const { errors } = error.response.data;
+          errors.forEach((errorMessage) => {
+            toast.error(errorMessage.message);
+          });
+          return;
+        } else {
+          toast.error(error.response?.data.message || error.message);
+        }
+      } else {
+        toast.error(error.message);
       }
-      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
@@ -67,8 +73,7 @@ const PageLogin = () => {
                 </div>
                 <div className="flex w-full component-preview p-4 items-center justify-center gap-2 font-sans">
                   <Button type="submit" variant="outline" color="success">
-                    {" "}
-                    Ingresar{" "}
+                    {loginMutation.isLoading ? "Ingresando..." : "Login"}
                   </Button>
                 </div>
               </form>

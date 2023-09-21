@@ -20,7 +20,7 @@ export const handleInterceptors = {
       async (error) => {
         const originalRequest = error.config;
         if (
-          error.response.status === 401 &&
+          error?.response?.status === 401 &&
           !isRefreshing &&
           !originalRequest._retry
         ) {
@@ -29,11 +29,11 @@ export const handleInterceptors = {
           try {
             const newToken = await Reflesh();
             set({
-              Token: newToken.token,
+              Token: newToken?.token,
             });
             instance.defaults.headers.common[
               "Authorization"
-            ] = `Bearer ${newToken.token}`;
+            ] = `Bearer ${newToken?.token}`;
             return instance(originalRequest);
           } catch (error) {
             // Manejar el error de actualización de token aquí, como desloguear al usuario o redirigir a la página de inicio de sesión
