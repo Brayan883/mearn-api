@@ -5,10 +5,12 @@ import { handleInterceptors } from "../utlis/confInterceptors";
 
 export const useStore = create(
   devtools((set, get) => ({
-    Token: null,
-    addToken: ({ token }) => {
+    Token: null,    
+    IsAuth: false,
+    addToken: ({ token , IsAuth }) => {
       set({
         Token: token,
+        IsAuth:IsAuth                
       });
     },
     logout: () => {
@@ -18,8 +20,8 @@ export const useStore = create(
     },
     refreshToken: () => {
       let isRefreshing = false;
-      handleInterceptors.InterceptorsUse({get})
-      handleInterceptors.InterceptorsReflesh({isRefreshing,set});
+      handleInterceptors.InterceptorsUse({ get });
+      handleInterceptors.InterceptorsReflesh({ isRefreshing, set });
       return instance;
     },
   }))
