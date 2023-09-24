@@ -15,7 +15,7 @@ export const FormPost = () => {
 
   return (
     <>
-      <div className="p-4">
+      <div className="">
         <Card className="w-full  shadow-xl hover:-translate-y-1 transition-all ease-out">
           <Card.Body>
             <Card.Title

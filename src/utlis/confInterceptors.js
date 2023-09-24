@@ -29,18 +29,15 @@ export const handleInterceptors = {
           try {
             const newToken = await Reflesh();
             set({
-              Token: newToken?.token              
+              Token: newToken?.token,
             });
             instance.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${newToken?.token}`;
             return instance(originalRequest);
           } catch (error) {
-            // Manejar el error de actualización de token aquí, como desloguear al usuario o redirigir a la página de inicio de sesión
-            set({
-              Token: null,
-            });
-            console.error("consola", error.message);
+            window.localStorage.clear();
+            window.location.href = "/";
           } finally {
             isRefreshing = false;
           }

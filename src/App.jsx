@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PageHome from "./pages/PageHome";
 import PageProtected from "./componets/PageProtected";
 
-function App() {
+function App() {  
   return (
     <>
       <BrowserRouter>

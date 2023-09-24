@@ -29,12 +29,12 @@ const ListTable = ({ data }) => {
 
   return (
     <>
-      <div className="p-4">
+      <div className="">
         <Card className="w-full  shadow-xl hover:-translate-y-1 transition-all ease-out">
           <Card.Title className="p-4"> Listado de post </Card.Title>
           <Card.Body>
-            <div className="overflow-x-auto">
-              <Table>
+            <div className="h-[268px]  overflow-y-scroll   ">
+              <Table className="" >
                 <Table.Head>
                   <span />
                   <span>Id</span>
@@ -42,44 +42,45 @@ const ListTable = ({ data }) => {
                   <span>Descripcion</span>
                   <span>Opciones</span>
                 </Table.Head>
-
-                <Table.Body>
-                  {data?.map((item) => (
-                    <Table.Row key={item.id}>
-                      <span></span>
-                      <span>{item.id}</span>
-                      <span>{item.title}</span>
-                      <span>{item.content}</span>
-                      <span className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            DataUpdate.current = item;
-                            handleToggleModal();
-                          }}
-                          variant="outline"
-                          color="info"
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={
-                            deletePost.isLoading &&
+                <Table.Body   >
+                  {data?.map((item) => {                    
+                    return (
+                      <Table.Row key={item.id}   >
+                        <span></span>
+                        <span>{item.id}</span>
+                        <span>{item.title}</span>
+                        <span>{item.content}</span>
+                        <span className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              DataUpdate.current = item;
+                              handleToggleModal();
+                            }}
+                            variant="outline"
+                            color="info"
+                          >
+                            Editar
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={
+                              deletePost.isLoading &&
+                              item.id === deletePost.data?.id
+                            }
+                            onClick={() => deletePost.mutate(item.id)}
+                            color="error"
+                          >
+                            {deletePost.isLoading &&
                             item.id === deletePost.data?.id
-                          }
-                          onClick={() => deletePost.mutate(item.id)}
-                          color="error"
-                        >
-                          {deletePost.isLoading &&
-                          item.id === deletePost.data?.id
-                            ? "Eliminando..."
-                            : "Eliminar"}
-                        </Button>
-                      </span>
-                    </Table.Row>
-                  ))}
+                              ? "Eliminando..."
+                              : "Eliminar"}
+                          </Button>
+                        </span>
+                      </Table.Row>
+                    );
+                  })}
                 </Table.Body>
               </Table>
             </div>

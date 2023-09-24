@@ -6,7 +6,7 @@ const PageHome = () => {
   return (
     <>
       <div className="container mx-auto">
-        <div className="p-4">
+        <div className="py-4">
           <Navbar className="shadow-md">
             <Navbar.Start>
               <Dropdown>

@@ -7,7 +7,7 @@ export const UseQuery = () => {
   const refreshToken = useStore((state) => state.refreshToken);
 
   const deletePost = useMutation({
-    mutationFn: async (id) => {      
+    mutationFn: async (id) => {
       return refreshToken()
         .delete(`api/v1/posts/${id}`)
         .then((response) => response?.data);
@@ -57,7 +57,7 @@ export const UseQuery = () => {
     queryFn: async () => {
       return refreshToken()
         .get("api/v1/posts")
-        .then((response) => response?.data.posts);
+        .then((response) => response?.data?.posts);
     },
     refetchOnWindowFocus: false,
     onError: (error) => {
@@ -78,7 +78,7 @@ export const UseQuery = () => {
   });
 
   const AddPosts = useMutation({
-    mutationFn: async ({ title, content, published }) => {      
+    mutationFn: async ({ title, content, published }) => {
       return refreshToken()
         .post("api/v1/posts", { title, content, published })
         .then((response) => response?.data);
@@ -96,7 +96,10 @@ export const UseQuery = () => {
         if (oldData == null) return [newCommentToAdd];
         return [
           ...oldData,
-          { id: window.crypto.randomUUID(), ...newCommentToAdd },
+          {
+            id: window.crypto.randomUUID(),
+            ...newCommentToAdd,
+          },
         ];
       });
 
@@ -133,7 +136,7 @@ export const UseQuery = () => {
   });
 
   const updatePost = useMutation({
-    mutationFn: async ({ id, title, content, published }) => {           
+    mutationFn: async ({ id, title, content, published }) => {
       return refreshToken()
         .patch(`api/v1/posts/${id}`, { title, content, published })
         .then((response) => response?.data);
