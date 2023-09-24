@@ -29,8 +29,7 @@ export const handleInterceptors = {
           try {
             const newToken = await Reflesh();
             set({
-              Token: newToken?.token,
-              expiresIn: newToken?.expiresIn,
+              Token: newToken?.token              
             });
             instance.defaults.headers.common[
               "Authorization"

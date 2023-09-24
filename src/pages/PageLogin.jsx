@@ -21,8 +21,9 @@ const PageLogin = () => {
       const { email, password } = Object.fromEntries(new FormData(e.target));
       const data = await loginMutation.mutateAsync({ email, password });
       if (data) {
-        addToken({ token: data.token, expiresIn: data.expiresIn });
+        addToken({ token: data.token });
         window.localStorage.setItem("IsUser", true);
+        window.localStorage.setItem("StartTime", new Date().getTime());
         navigate("/home");
       } else {
         throw new Error("Error fetching data");

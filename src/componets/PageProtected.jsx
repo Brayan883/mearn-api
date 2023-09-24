@@ -1,18 +1,39 @@
 /* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { useStore } from "../store/Store";
+
 const PageProtected = ({ children }) => {
-  const expiresIn = useStore((state) => state.expiresIn);
-  const IsAuth = window.localStorage.getItem("IsUser" || false);
-  const TokenExpire = expiresIn * 1000 - 6000;
-  if (expiresIn && IsAuth) {    
-    if (Date.now() > TokenExpire) {
-      window.localStorage.removeItem("IsUser");
-      return <Navigate to="/" />;
+  const IsAuth = window.localStorage.getItem("IsUser") || false;
+  const [timeRemaining, setTimeRemaining] = useState(0);
+  useEffect(() => {
+    const expiresIn = 86400000;
+    const startTime = window.localStorage.getItem("StartTime") || null;
+    if (IsAuth && startTime) {      
+      const currentTime = new Date().getTime();
+      const elapsedTime = currentTime - parseInt(startTime, 10);
+      if (elapsedTime < expiresIn) {                        
+        const remainingTime = expiresIn - elapsedTime;
+        setTimeRemaining(remainingTime);
+        const timeoutId = setTimeout(() => {          
+          window.localStorage.removeItem("IsUser");
+          window.localStorage.removeItem("StartTime");
+        }, remainingTime);
+        return () => clearTimeout(timeoutId);
+      } else {        
+        window.localStorage.removeItem("IsUser");
+        window.localStorage.removeItem("StartTime");
+      }
     }
-  }
-  if (!IsAuth && !expiresIn ) return <Navigate to="/" />;    
-  return children ? children : <Outlet />;
+  }, [IsAuth]);
+  if (!IsAuth) return <Navigate to="/" />;
+  return (
+    <>
+      {timeRemaining > 0 ? (
+        <div className="text-2xl p-2 text-emerald-600 font-bold text-center"  > Tiempo restante: {Math.floor(timeRemaining / 3600000)} horas</div>
+      ) : null}
+      {children ? children : <Outlet />}
+    </>
+  );
 };
 
 export default PageProtected;
