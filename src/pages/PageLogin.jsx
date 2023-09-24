@@ -19,12 +19,15 @@ const PageLogin = () => {
     e.preventDefault();
     try {
       const { email, password } = Object.fromEntries(new FormData(e.target));
-      const data = await loginMutation.mutateAsync({ email, password });      
-      if (data) {        
-        addToken({ token: data.token, IsAuth: true });
+      const data = await loginMutation.mutateAsync({ email, password });
+      if (data) {
+        addToken({ token: data.token, expiresIn: data.expiresIn });
+        window.localStorage.setItem("IsUser", true);
         navigate("/home");
+      } else {
+        throw new Error("Error fetching data");
       }
-      e.target.reset();      
+      e.target.reset();
     } catch (error) {
       if (error instanceof AxiosError) {
         if (Array.isArray(error.response?.data.errors)) {

@@ -5,12 +5,12 @@ import { handleInterceptors } from "../utlis/confInterceptors";
 
 export const useStore = create(
   devtools((set, get) => ({
-    Token: null,    
-    IsAuth: false,
-    addToken: ({ token , IsAuth }) => {
+    Token: null,
+    expiresIn: null,
+    addToken: ({ token, expiresIn }) => {
       set({
         Token: token,
-        IsAuth:IsAuth                
+        expiresIn: expiresIn,
       });
     },
     logout: () => {
