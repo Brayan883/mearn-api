@@ -18,7 +18,7 @@ export const HandleModal = ({ modal, handleToggleModal, DataUpdate }) => {
         <Modal.Header className="flex  justify-between ">
           {" "}
           <div className="">
-            <h3 className="text-2xl">Editar Posts</h3>
+            <h3 className="text-2xl text-blue-500">Editar Posts</h3>
           </div>{" "}
           <div className="">
             <Button
